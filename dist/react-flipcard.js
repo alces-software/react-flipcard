@@ -125,7 +125,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	
 	  componentDidMount: function componentDidMount() {
+	    this.mounted = true;
 	    this._hideFlippedSide();
+	  },
+	
+	  componentWillUnmount: function componentWillUnmount() {
+	    this._mounted = false;
 	  },
 	
 	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
@@ -182,7 +187,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	
 	  handleFocus: function handleFocus() {
-	    if (this.props.disabled) return;
+	    if (this.props.disabled || !this._mounted) return;
 	
 	    this.setState({
 	      isFlipped: true
@@ -190,7 +195,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	
 	  handleBlur: function handleBlur() {
-	    if (this.props.disabled) return;
+	    if (this.props.disabled || !this._mounted) return;
 	
 	    this.setState({
 	      isFlipped: false
@@ -249,17 +254,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	
 	  _showBothSides: function _showBothSides() {
-	    this.refs.front.style.display = '';
-	    this.refs.back.style.display = '';
+	    this.refs.front && (this.refs.front.style.display = '');
+	    this.refs.back && (this.refs.back.style.display = '');
 	  },
 	
 	  _hideFlippedSide: function _hideFlippedSide() {
 	    // This prevents the flipped side from being tabbable
 	    if (this.props.disabled) {
 	      if (this.state.isFlipped) {
-	        this.refs.front.style.display = 'none';
+	        this.refs.front && (this.refs.front.style.display = 'none');
 	      } else {
-	        this.refs.back.style.display = 'none';
+	        this.refs.back && (this.refs.back.style.display = 'none');
 	      }
 	    }
 	  }
@@ -282,8 +287,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2015 Jed Watson.
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
 	  Licensed under the MIT License (MIT), see
 	  http://jedwatson.github.io/classnames
 	*/
@@ -295,7 +300,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		var hasOwn = {}.hasOwnProperty;
 	
 		function classNames () {
-			var classes = '';
+			var classes = [];
 	
 			for (var i = 0; i < arguments.length; i++) {
 				var arg = arguments[i];
@@ -304,28 +309,28 @@ return /******/ (function(modules) { // webpackBootstrap
 				var argType = typeof arg;
 	
 				if (argType === 'string' || argType === 'number') {
-					classes += ' ' + arg;
+					classes.push(arg);
 				} else if (Array.isArray(arg)) {
-					classes += ' ' + classNames.apply(null, arg);
+					classes.push(classNames.apply(null, arg));
 				} else if (argType === 'object') {
 					for (var key in arg) {
 						if (hasOwn.call(arg, key) && arg[key]) {
-							classes += ' ' + key;
+							classes.push(key);
 						}
 					}
 				}
 			}
 	
-			return classes.substr(1);
+			return classes.join(' ');
 		}
 	
 		if (typeof module !== 'undefined' && module.exports) {
 			module.exports = classNames;
 		} else if (true) {
 			// register as 'classnames', consistent with npm package name
-			!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
 				return classNames;
-			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 		} else {
 			window.classNames = classNames;
 		}
